@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Files in Repository</title>
+</head>
+<body>
+  <h1>Files in Repository</h1>
+  <ul>
+    <script>
+  fetch('/.git/HEAD')
+    .then(r => r.text())
+    .then(text => {
+      const match = text.match(/ref: refs\/heads\/(.+)/);
+      if (match) {
+        const branch = match[1];
+        fetch(`/api/refs/heads/${branch}`)
+          .then(r => r.json())
+          .then(data => {
+            const ul = document.querySelector('ul');
+            ul.innerHTML = '';
+            data.objects.forEach(obj => {
+              ul.innerHTML += `<li>${obj.name}</li>`;
+            });
+          });
+      }
+    });
+</script>
+  </ul>
+</body>
+</html>
