@@ -1,0 +1,58 @@
+name: Generate File List
+
+on:
+  push:
+    paths:
+      - 'docs/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate list.html
+        run: |
+          cat > docs/list.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <meta charset="UTF-8">
+              <title>Files in Repository</title>
+          </head>
+          <body>
+              <h1>Files in Repository</h1>
+              <ul>
+          EOF
+
+          find docs -maxdepth 1 -type f \
+            ! -name "list.html" \
+            | sort \
+            | while read file; do
+                filename=$(basename "$file")
+                echo "<li>\"$filename\"</li>" >> docs/list.html
+              done
+
+          cat >> docs/list.html << 'EOF'
+              </ul>
+          </body>
+          </html>
+          EOF
+
+      - name: Commit updated list
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add docs/list.html
+
+          if ! git diff --cached --quiet; then
+            git commit -m "Update file listing"
+            git push
+          fi
