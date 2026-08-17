@@ -13,7 +13,7 @@
       const match = text.match(/ref: refs\/heads\/(.+)/);
       if (match) {
         const branch = match[1];
-        fetch(`/api/refs/heads/${branch}`)
+        fetch(`/api/refs/heads/${main}`)
           .then(r => r.json())
           .then(data => {
             const ul = document.querySelector('ul');
