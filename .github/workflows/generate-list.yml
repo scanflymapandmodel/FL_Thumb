@@ -31,13 +31,13 @@ jobs:
               <ul>
           EOF
 
-          find docs -maxdepth 1 -type f \
-            ! -name "list.html" \
-            | sort \
-            | while read file; do
-                filename=$(basename "$file")
-                echo "<li>\"$filename\"</li>" >> docs/list.html
-              done
+find docs -maxdepth 1 -type f \
+  \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) \
+  | sort \
+  | while read file; do
+      filename=$(basename "$file")
+      echo "<li>filename\">$filename</a></li>" >> docs/list.html
+    done
 
           cat >> docs/list.html << 'EOF'
               </ul>
