@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Generate list.html
         run: |
@@ -24,21 +24,20 @@ jobs:
           <html>
           <head>
               <meta charset="UTF-8">
-              <title>Files in Repository</title>
+              <title>Image List</title>
           </head>
           <body>
-              <h1>Files in Repository</h1>
+              <h1>Images</h1>
               <ul>
           EOF
 
-find 
-docs -maxdepth 1 -type f \
-  \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) \
-  | sort \
-  | while read file; do
-      filename=$(basename "$file")
-      echo "<li>filename\">$filename</a></li>" >> docs/list.html
-    done
+          find docs -maxdepth 1 -type f \
+            \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) \
+            | sort \
+            | while read file; do
+                filename=$(basename "$file")
+                echo "<li><a$filename\"$filename</a></li>" >> docs/list.html
+              done
 
           cat >> docs/list.html << 'EOF'
               </ul>
