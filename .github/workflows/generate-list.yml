@@ -36,7 +36,12 @@ jobs:
             | sort \
             | while read file; do
                 filename=$(basename "$file")
-                echo "<li><a$filename\"$filename</a></li>" >> docs/list.html
+                echo "<li>
+\"$filename\"
+\" width=\"200\"><br>
+$filename
+</a>
+</li>" >> docs/list.html
               done
 
           cat >> docs/list.html << 'EOF'
